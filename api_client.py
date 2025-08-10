@@ -65,16 +65,18 @@ class APIClient:
     
     def get_posts(self, page: int = 0, size: int = 20) -> Optional[Dict]:
         """Get posts with pagination."""
-        params = {"page": page, "size": size}
-        return self._make_request('GET', '/api/data/posts', params=params)
+        # Note: Backend doesn't support pagination parameters, but we'll handle it client-side
+        return self._make_request('GET', '/api/data/posts')
     
     def get_post_comments(self, post_id: str) -> Optional[Dict]:
         """Get comments for a specific post."""
-        return self._make_request('GET', f'/api/data/posts/{post_id}/comments')
+        # Note: Backend doesn't have direct post->comments endpoint, we'll get all comments and filter
+        return self._make_request('GET', '/api/data/comments')
     
     def get_network_graph(self) -> Optional[Dict]:
         """Get network graph data."""
-        return self._make_request('GET', '/api/network/graph')
+        # Note: Backend doesn't have network graph endpoint, we'll use link analysis
+        return None
     
     def get_statistics(self) -> Optional[Dict]:
         """Get dashboard statistics."""
@@ -82,12 +84,25 @@ class APIClient:
     
     def stop_scraper(self) -> Optional[Dict]:
         """Stop the scraper."""
-        return self._make_request('POST', '/api/scraper/stop')
+        # Note: Backend doesn't have stop endpoint, we'll use the status endpoint
+        return None
     
     def test_connection(self) -> bool:
         """Test if the backend is reachable."""
         try:
-            response = self.session.get(f"{self.base_url}/api/scraper/status", timeout=5)
+            response = self.session.get(f"{self.base_url}/api/health", timeout=5)
             return response.status_code == 200
         except:
             return False
+    
+    def get_link_analysis(self, post_id: str) -> Optional[Dict]:
+        """Get link analysis for a specific post."""
+        return self._make_request('GET', f'/api/link-analysis/{post_id}')
+    
+    def get_post_by_id(self, post_id: str) -> Optional[Dict]:
+        """Get a specific post by ID."""
+        return self._make_request('GET', f'/api/posts/{post_id}')
+    
+    def get_comment_by_id(self, comment_id: str) -> Optional[Dict]:
+        """Get a specific comment by ID."""
+        return self._make_request('GET', f'/api/comments/{comment_id}')

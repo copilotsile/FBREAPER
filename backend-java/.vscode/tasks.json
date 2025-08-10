@@ -1,0 +1,33 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Debug Java Backend",
+			"type": "shell",
+			"command": "mvnDebug spring-boot:run",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [
+				"$java"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run Java Backend in Debug Mode",
+			"type": "shell",
+			"command": "mvn spring-boot:run -Dspring-boot.run.fork=false -X",
+			"isBackground": false,
+			"problemMatcher": [
+				"$java"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Run Java Backend",
+			"type": "shell",
+			"command": "mvn spring-boot:run",
+			"isBackground": false,
+			"group": "build"
+		}
+	]
+}

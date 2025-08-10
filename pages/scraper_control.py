@@ -28,12 +28,13 @@ def render_scraper_control(api_client):
     if st.button("🔄 Refresh Status"):
         st.rerun()
     
-    with st.spinner("Loading scraper status..."):
-        status_data = api_client.get_scraper_status()
-    
-    if not status_data:
-        st.warning("⚠️ Unable to load scraper status.")
-        return
+    # Note: Backend doesn't have a dedicated status endpoint, so we'll show a simplified status
+    status_data = {
+        'status': 'UNKNOWN',
+        'progress': 0,
+        'currentKeyword': 'None',
+        'details': 'Status monitoring not available in current backend version'
+    }
     
     # Display status information
     col1, col2, col3 = st.columns(3)
@@ -121,46 +122,15 @@ def render_scraper_control(api_client):
     with col2:
         st.markdown("### Stop Current Session")
         
-        if status_data.get('status') == 'RUNNING':
-            if st.button("🛑 Stop Scraper", type="primary"):
-                with st.spinner("Stopping scraper..."):
-                    result = api_client.stop_scraper()
-                
-                if result:
-                    st.success("✅ Scraper stopped successfully")
-                    time.sleep(2)
-                    st.rerun()
-                else:
-                    st.error("❌ Failed to stop scraper.")
-        else:
-            st.info("ℹ️ No active scraping session to stop.")
+        st.info("ℹ️ Stop functionality not available in current backend version.")
+        st.caption("The backend doesn't provide a stop endpoint. You may need to manually stop the scraper process.")
     
     st.markdown("---")
     
     # Session History
     st.subheader("📋 Recent Sessions")
-    
-    if 'sessionHistory' in status_data and status_data['sessionHistory']:
-        for session in status_data['sessionHistory'][:5]:
-            with st.expander(f"Session: {session.get('sessionId', 'N/A')} - {session.get('keyword', 'N/A')}"):
-                col1, col2, col3 = st.columns(3)
-                
-                with col1:
-                    st.write(f"**Status:** {session.get('status', 'Unknown')}")
-                
-                with col2:
-                    st.write(f"**Started:** {session.get('startTime', 'Unknown')}")
-                
-                with col3:
-                    st.write(f"**Posts:** {session.get('postsCollected', 0)}")
-                
-                if session.get('endTime'):
-                    st.write(f"**Ended:** {session['endTime']}")
-                
-                if session.get('error'):
-                    st.error(f"**Error:** {session['error']}")
-    else:
-        st.info("No recent sessions found.")
+    st.info("Session history not available in current backend version.")
+    st.caption("The backend doesn't provide session history tracking.")
     
     # Real-time monitoring
     st.markdown("---")
