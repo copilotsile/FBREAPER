@@ -1,7 +1,0 @@
-kafka-python
-playwright
-fastapi
-uvicorn
-pydantic
-requests
-textblob
